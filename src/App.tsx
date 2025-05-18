@@ -1,3 +1,5 @@
+import CriptoSearchFrom from "./components/CriptoSearchFrom"
+
 function App() {
 
   return (
@@ -7,7 +9,7 @@ function App() {
           Cotizador de <span>Criptomonedas</span>
         </h1>
         <div className="content">
-          <p>El mejor lugar para cotizar criptomonedas al instante.</p>
+          <CriptoSearchFrom />
         </div>
       </div>
     </>
