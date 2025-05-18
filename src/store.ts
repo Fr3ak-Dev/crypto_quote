@@ -2,6 +2,7 @@ import axios from 'axios';
 import { create } from 'zustand';
 import { CryptoCurrenciesResponseArraySchema } from './schema/crypto-schema';
 import type { Cryptocurrency } from './types';
+import { devtools } from 'zustand/middleware';
 
 type CryptoStore = {
     cryptocurrencies: Cryptocurrency[]
@@ -17,7 +18,7 @@ async function getCryptos() {
     }
 }
 
-export const useCryptoStore = create<CryptoStore>((set) => ({
+export const useCryptoStore = create<CryptoStore>()(devtools((set) => ({
     cryptocurrencies: [],
     fetchCriptos: async () => {
         const cryptocurrencies = await getCryptos()
@@ -25,4 +26,4 @@ export const useCryptoStore = create<CryptoStore>((set) => ({
             cryptocurrencies
         }))
     }
-}))
+})))
