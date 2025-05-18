@@ -2,6 +2,7 @@ import { useState, type ChangeEvent } from 'react';
 import { currencies } from '../data';
 import { useCryptoStore } from '../store';
 import type { Pair } from '../types';
+import ErrorMessage from './ErrorMessage';
 
 export default function CriptoSearchFrom() {
 
@@ -11,6 +12,8 @@ export default function CriptoSearchFrom() {
         criptocurrency: ''
     })
 
+    const [error, setError] = useState('')
+
     const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
         setPair({
             ...pair,
@@ -18,11 +21,23 @@ export default function CriptoSearchFrom() {
         })
     }
 
+    const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        if (Object.values(pair).includes('')) {
+            setError('Todos los campos son obligatorios')
+            return
+        }
+        setError('')
+
+        // consultar la API
+    }
+
     return (
-        <form className="form">
+        <form className="form" onSubmit={handleSubmit}>
+            {error ?? <ErrorMessage>{error}</ErrorMessage>}
             <div className="field">
                 <label htmlFor="currency">Moneda:</label>
-                <select name="currency" id="currency" onChange={handleChange}>
+                <select name="currency" id="currency" onChange={handleChange} value={pair.currency}>
                     <option value="">-- Seleccione --</option>
                     {
                         currencies.map( currency => (
@@ -33,7 +48,7 @@ export default function CriptoSearchFrom() {
             </div>
             <div className="field">
                 <label htmlFor="criptocurrency">Criptomoneda:</label>
-                <select name="criptocurrency" id="criptocurrency" onChange={handleChange}>
+                <select name="criptocurrency" id="criptocurrency" onChange={handleChange} value={pair.criptocurrency}>
                     <option value="">-- Seleccione --</option>
                     {cryptocurrencies.map(crypto => (
                         <option key={crypto.CoinInfo.FullName} value={crypto.CoinInfo.Name}>{crypto.CoinInfo.FullName}</option>
